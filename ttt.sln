@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrippleT.Web", "TrippleT.Web\TrippleT.Web.csproj", "{D2CC9ADE-93D5-42D9-A606-D4A728554A52}"
 EndProject
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "TrippleT.Azure", "TrippleT.Azure\TrippleT.Azure.ccproj", "{D875D23F-D441-49D6-9A00-906378058137}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{D2CC9ADE-93D5-42D9-A606-D4A728554A52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2CC9ADE-93D5-42D9-A606-D4A728554A52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2CC9ADE-93D5-42D9-A606-D4A728554A52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D875D23F-D441-49D6-9A00-906378058137}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D875D23F-D441-49D6-9A00-906378058137}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D875D23F-D441-49D6-9A00-906378058137}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D875D23F-D441-49D6-9A00-906378058137}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
