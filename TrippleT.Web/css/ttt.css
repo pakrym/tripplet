@@ -24,10 +24,10 @@ body {
 {
     margin-top: 150px;
 }
-.block-3d
+.block-3d 
 {
-    height: 450px;
     margin-top: 50px !important;
+    height: 450px;
 }
 .block-inner {
     margin: 10px;
