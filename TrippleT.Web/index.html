@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>olala</title>
+    <link rel="stylesheet" type="text/css" href="css/ttt.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <script src="/Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="/Scripts/jquery.signalR-0.5.0.min.js" type="text/javascript"></script>
+    <script src="/Scripts/tripplet.js" type="text/javascript"></script>
+    <script src="signalr/hubs" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        $(function () {
+
+            TTT.init();
+
+            $("#toggle3d").click(function () { TTT.toggle3d(); });
+
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="offset4 span4 block block-middle">
+                <div class="block-inner">
+                    <div id="loginScreen">
+                        <h2>
+                            Enter:</h2>
+                        <input id="playerName" type="text" placeholder="my name is" />
+                        <a id="enterButton" href="#" class="btn btn-primary btn-large">Let me in!</a>
+                    </div>
+                    <div id="playersScreen" style="display: none">
+                        <h2>
+                            You are: <span id="myName"></span>
+                            <br />
+                            Players:</h2>
+                        <div id="noOne">
+                            No one is here except you :(. Call friends and play!</div>
+                        <ul id="playerList" class="nav nav-pills nav-stacked">
+                        </ul>
+                        <div id="offerBox" class="alert-info alert" style="display: none">
+                            <p>
+                                <span id="offerName"></span>is offering you to play.</p>
+                            <a id="acceptOffer" href="#" class="btn btn-success">Accept</a> <a id="declineOffer"
+                                href="#" class="btn btn-warning">Decline</a>
+                        </div>
+                    </div>
+
+                    <div id="gameScreen" style="display: none">
+                        <a href="#" id="toggle3d">Toggle 3D</a>
+                        <h3>It's &nbsp;<span id="move"></span>&nbsp; move.</h3>
+                        <div id="field">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
