@@ -24,10 +24,15 @@
         <div class="row">
             <div class="offset4 span4 block block-middle">
                 <div class="block-inner">
-                
-                    
-
                     <div id="loginScreen" style="display: none">
+                        <h2>
+                            3D Tic-Tac-Toe</h2>
+                        <p>
+                            This is online 3D Tic-Tac-Toe game made using .NET, SignalR library and Twitter
+                            Bootstrap. Source code availible at <a href="https://github.com/pakrym/tripplet">GitHub</a></p>
+                        <p>
+                            Author: <a href="mailto:pavel@krymets.com">Pavel Krymets</a></p>
+                        <hr />
                         <h2>
                             Enter:</h2>
                         <input id="playerName" type="text" placeholder="my name is" />
@@ -36,33 +41,34 @@
                     <div id="playersScreen" style="display: none">
                         <h2>
                             You are: <span id="myName"></span>
-                            <br />
-                            Players:</h2>
-                        <div id="noOne">
-                            No one is here except you :(. Call friends and play!</div>
-                        <ul id="playerList" class="nav nav-pills nav-stacked">
-                        </ul>
+                        </h2>
+                        
                         <div id="offerBox" class="alert-info alert" style="display: none">
                             <p>
                                 <span id="offerName"></span> is offering you to play.</p>
                             <a id="acceptOffer" href="#" class="btn btn-success">Accept</a> <a id="declineOffer"
                                 href="#" class="btn btn-warning">Decline</a>
                         </div>
-                    </div>
 
+                        <h2>
+                            Players:</h2>
+                        <p>
+                            Click on player name to offer him a game</p>
+                        <div id="noOne">
+                            No one is here except you :(. Call friends and play!</div>
+                        <ul id="playerList" class="nav nav-pills nav-stacked">
+                        </ul>
+                    </div>
                     <div id="victoryScreen" style="display: none">
                         <h3>
                             &nbsp;<span id="winner"></span> won!.</h3>
                         <a href="#" class="backButton btn">Back</a>
                     </div>
-
-
                     <div id="exitScreen" style="display: none">
-                        <h3> You oppenent disconnected or left the game.</h3>
-                        
-                        <a href="#" class="backButton btn" >Back</a>
+                        <h3>
+                            You oppenent disconnected or left the game.</h3>
+                        <a href="#" class="backButton btn">Back</a>
                     </div>
-
                     <div id="gameScreen" style="display: none">
                         <a href="#" id="toggle3d" class="btn btn-mini"><i class="icon-th"></i>Toggle 3D</a>
                         <a href="#" id="leaveGame" class="btn btn-mini"><i class="icon-remove"></i>Leave game</a>
