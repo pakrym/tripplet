@@ -3,7 +3,8 @@
     id: "",
     hub: null,
     fieldSize: 4,
-
+    players: {},
+    currentScreen: null,
     // is in 3d mode
     d3: true,
     //game state: 
@@ -42,6 +43,11 @@
         }
 
     },
+    endGame: function () {
+        self.opponent = null;
+        self.marks = null;
+        self.state = 0;
+    },
 
     myMove: function () {
         this.state = 1;
@@ -64,6 +70,17 @@
         }
     },
 
+    toggleMode: function (vertical) {
+
+        var block = $(".block");
+
+        block.toggleClass("span4", vertical);
+        block.toggleClass("offset4", vertical);
+
+
+        block.toggleClass("span14", !vertical);
+    },
+
     toggle3d: function (enable) {
         var self = this;
         if (!enable) {
@@ -72,15 +89,11 @@
 
         self.d3 = enable;
 
-        var block = $(".block");
-        block.toggleClass("span4", self.d3);
-        block.toggleClass("offset4", self.d3);
-        block.toggleClass("block-3d", self.d3);
 
-
-        block.toggleClass("span14", !self.d3);
-
-        //HACK: remove and put back planes of Chrome will 
+        self.toggleMode(self.d3); // go to vertical if 3d and horizontal, if not
+        $(".block").toggleClass("block-3d", self.d3);
+        
+        //HACK: remove and put back lanes of Chrome will 
         // break hover event on top part of plane 
         // see: http://stackoverflow.com/questions/10534697/hover-works-only-on-lower-part-of-rotatex-transformed-div
         $(".plane").remove();
@@ -120,41 +133,73 @@
         if (self.state == 1) // my move
         {
             var pos = $(tile).data();
+            if (self.field[pos.x][pos.y][pos.z]) return;
             self.hub.move(pos.x, pos.y, pos.z);
-            this.opponentMove();
+
         }
     },
 
     updateMove: function (id, x, y, z) {
-        // do i realy need this check?
-        if (this.opponent != id && this.id != id) return;
 
-        this.field[x][y][z] = this.marks[id];
-        this.tryUpdateTile(x, y, z);
-        if (this.opponent == id)// i was oppoonent's move, no just update of yours
-            this.myMove();
+        var self = this;
+
+        // do i realy need this check?
+        if (self.opponent != id && this.id != id) return;
+
+        self.field[x][y][z] = this.marks[id];
+        self.tryUpdateTile(x, y, z);
+        if (self.opponent == id)// i was oppoonent's move, no just update of yours
+            self.myMove();
+        if (self.id == id)
+            self.opponentMove();
+    },
+
+    showScreen: function (screen, callback) {
+        var self = this;
+        if (self.currentScreen) {
+            self.currentScreen.toggle(false);
+            if (self.currentScreenCallback) {
+                self.currentScreenCallback(screen);
+            }
+        }
+        screen.toggle(true);
+        self.currentScreen = screen;
+        self.currentScreenCallback = callback;
     },
 
     showPlayers: function () {
         var self = this;
         $("#myName").text(self.name);
-        self.loginScreen.toggle(false);
-        self.playersScreen.toggle(true);
+        self.showScreen(self.playersScreen);
     },
 
     showGameScreen: function () {
         var self = this;
-        self.playersScreen.toggle(false);
-        self.gameScreen.toggle(true);
-
+        self.showScreen(self.gameScreen, function () {
+            self.toggleMode(true);
+            $(".block").toggleClass("block-3d", false);
+        });
     },
 
     showOffer: function (id) {
         var self = this;
 
-        $("#offerName").text($("#pl_" + id).text());
+        $("#offerName").text(self.players[id]);
         self.state = 4;
         self.offerBox.toggle(true);
+    },
+
+    showWin: function (id) {
+        var self = this;
+        self.endGame();
+        $("#winner").text(self.players[id]);
+        self.showScreen(self.victoryScreen);
+    },
+
+    showExit: function (id) {
+        var self = this;
+        self.endGame();
+        self.showScreen(self.exitScreen);
     },
 
     playerClick: function (id) {
@@ -169,6 +214,8 @@
         self.loginScreen = $("#loginScreen");
         self.playersScreen = $("#playersScreen");
         self.gameScreen = $("#gameScreen");
+        self.victoryScreen = $("#victoryScreen");
+        self.exitScreen = $("#exitScreen");
         self.offerBox = $("#offerBox");
 
         var connection = $.connection;
@@ -177,11 +224,16 @@
 
         hub.Enter = function (id, name) {
 
+            if (self.players[id]) return;
+
+            self.players[id] = name;
+
             if (id == self.id)// we are in!
             {
                 self.name = name;
                 self.showPlayers();
-            } else {
+            }
+            else {
                 $("#noOne").remove();
             }
 
@@ -193,6 +245,14 @@
         };
         hub.Left = function (id) {
             $("#pl_" + id).remove();
+            if (id == self.opponent) {
+                self.showExit(id);
+            }
+        };
+        hub.LeftGame = function (id) {
+            if (id == self.opponent) {
+                self.showExit(id);
+            }
         };
 
         hub.Game = function (ida, idb) {
@@ -202,6 +262,10 @@
             if (idb == self.id) {
                 self.startGame(ida, ida);
             }
+        };
+
+        hub.Win = function (id) {
+            self.showWin(id);
         };
 
         hub.Offer = function (id) {
@@ -226,7 +290,16 @@
         $("#enterButton").click(function () {
             hub.register($("#playerName").val());
         });
+        $("#leaveGame").click(function () {
+            hub.leaveGame();
+            self.endGame();
+            self.showPlayers();
+        });
+        $(".backButton").click(function () {
+            self.showScreen(self.playersScreen);
+        });
 
+        self.showScreen(self.loginScreen);
         self.hub = hub;
     }
 

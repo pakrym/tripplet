@@ -10,12 +10,20 @@ namespace TrippleT.Web
     public class TickTacToe : Hub, IDisconnect
     {
         private Random _random = new Random();
+
+        /// <summary>
+        /// Called by JS when player sets mark on field
+        /// </summary>
+        /// <param name="x"> x coordinate</param>
+        /// <param name="y">x coordinate</param>
+        /// <param name="z">x coordinate</param>
         public void Move(int x, int y, int z)
         {
             var playerId = this.Context.ConnectionId;
 
-            var game = GameRepository.Current.Get(playerId);
-            //don't update is move  was not valid
+            var game = GameRepository.Current.GetGameByPlayer(playerId);
+        
+            //don't update if move  was not valid
             if (game.Put(playerId, x, y, z))
             {
                 foreach (var player in game.Players)
@@ -25,6 +33,10 @@ namespace TrippleT.Web
             }
         }
 
+        /// <summary>
+        /// Called when one player offers a game to other
+        /// </summary>
+        /// <param name="playerId">whom to offer the game</param>
         public void MakeOffer(string playerId)
         {
 
@@ -33,6 +45,9 @@ namespace TrippleT.Web
             PlayerRepository.Current.AddOffer(playerId, player2Id);
         }
 
+        /// <summary>
+        /// Called when player accepts game offer
+        /// </summary>
         public void Accept()
         {
 
@@ -51,12 +66,18 @@ namespace TrippleT.Web
             }
 
         }
-
+        /// <summary>
+        /// Called when player declines game offer
+        /// </summary>
         public void Decline()
         {
             PlayerRepository.Current.RemoveOffer(this.Context.ConnectionId);
         }
 
+        /// <summary>
+        /// Called when player pushes "let me in" button
+        /// </summary>
+        /// <param name="name">player display name</param>
         public void Register(string name)
         {
             var playerId = this.Context.ConnectionId;
@@ -73,16 +94,28 @@ namespace TrippleT.Web
                 if (n.Key == playerId) continue;
                 c.Enter(n.Key, n.Value);
             }
-
-
+        }
+        /// <summary>
+        /// Called when player want's to leave current game
+        /// </summary>
+        public void LeaveGame()
+        {
+            
+            var playerId = this.Context.ConnectionId;
+            
+            if (GameRepository.Current.Destroy(playerId))
+                Clients.LeftGame(playerId);
         }
 
-
+        /// <summary>
+        /// Called when client disconnect detected
+        /// </summary>
+        /// <returns></returns>
         public Task Disconnect()
         {
             var playerId = Context.ConnectionId;
 
-            var g = GameRepository.Current.Get(playerId);
+            var g = GameRepository.Current.GetGameByPlayer(playerId);
             Clients.Left(playerId);
             GameRepository.Current.Destroy(playerId);
             PlayerRepository.Current.Exit(playerId);

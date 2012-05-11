@@ -24,7 +24,10 @@
         <div class="row">
             <div class="offset4 span4 block block-middle">
                 <div class="block-inner">
-                    <div id="loginScreen">
+                
+                    
+
+                    <div id="loginScreen" style="display: none">
                         <h2>
                             Enter:</h2>
                         <input id="playerName" type="text" placeholder="my name is" />
@@ -47,9 +50,23 @@
                         </div>
                     </div>
 
+                    <div id="victoryScreen" style="display: none">
+                        <h3>
+                            &nbsp;<span id="winner"></span> won!.</h3>
+                        <a href="#" class="backButton btn">Back</a>
+                    </div>
+
+
+                    <div id="exitScreen" style="display: none">
+                        <h3> You oppenent disconnected or left the game.</h3>
+                        
+                        <a href="#" class="backButton btn" >Back</a>
+                    </div>
+
                     <div id="gameScreen" style="display: none">
-                        <a href="#" id="toggle3d">Toggle 3D</a>
-                        <h3>It's &nbsp;<span id="move"></span>&nbsp; move.</h3>
+                        <a href="#" id="toggle3d">Toggle 3D</a>|<a href="#" id="leaveGame">Leave game</a>
+                        <h3>
+                            It's &nbsp;<span id="move"></span>&nbsp; move.</h3>
                         <div id="field">
                         </div>
                     </div>

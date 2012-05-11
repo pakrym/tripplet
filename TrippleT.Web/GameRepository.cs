@@ -28,7 +28,7 @@ namespace TrippleT.Web
             _games.Add(pb, game);
         }
 
-        public Game Get(string player)
+        public Game GetGameByPlayer(string player)
         {
             Game g;
             if (_games.TryGetValue(player, out g))
@@ -38,16 +38,19 @@ namespace TrippleT.Web
             return null;
         }
 
-        public void Destroy(string player)
+        public bool Destroy(string player)
         {
-            var game = Get(player);
+            var game = GetGameByPlayer(player);
+
+            var res = false;
             if (game != null)
             {
                 foreach (var p in game.Players)
                 {
-                    _games.Remove(p);
+                    res |= _games.Remove(p);
                 }
             }
+            return res;
         }
 
     }
