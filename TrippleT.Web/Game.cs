@@ -44,14 +44,92 @@ namespace TrippleT.Web
             return true;
         }
 
+
+
+        private class Point
+        {
+            public int X { get; set; }
+            public int Y { get; set; }
+            public int Z { get; set; }
+
+            public Point(int x, int y, int z)
+            {
+                X = x;
+                Y = y;
+                Z = z;
+            }
+
+            public Point Move(int dx, int dy, int dz, int s)
+            {
+                if ((X + dx >= 0 && X + dx < s)
+                    && (Y + dy >= 0 && Y + dy < s)
+                    && (Z + dz >= 0 && Z + dz < s))
+                {
+
+                    return new Point(X + dx, Y + dy, Z + dz);
+                }
+                return null;
+            }
+
+            // only works if points are on one line
+            public int Distance(Point other)
+            {
+                return 1 + Math.Max(
+                    other.X - this.X, 
+                    Math.Max(
+                        other.Y - this.Y, 
+                        other.Z - this.Z));
+            }
+        }
         /// <summary>
         /// Checks if one of the players won
         /// </summary>
         /// <returns>playerId if someone won, -1 if no one did</returns>
-        public int CheckVictory()
+        public string CheckVictory(int x, int y, int z)
         {
-            return -1;
+            var who = Field[x, y, z];
+            if (who == 0) return null;
+            var ways = new[] { -1, 0, 1 };
+            foreach (var wx in ways)
+            {
+                foreach (var wy in ways)
+                {
+                    foreach (var wz in ways)
+                    {
+                        if (wx == 0 && wy == 0 && wz == 0)
+                            continue;
+
+                        Point pa = new Point(x, y, z);
+
+                        Point pb = new Point(x, y, z);
+
+
+                        Point newA;
+                        while ((newA = pa.Move(wx, wy, wz, _fieldSize)) != null
+                               && Field[newA.X, newA.Y, newA.Z] == who)
+                        {
+                            pa = newA;
+                        }
+
+                        Point newB;
+                        while ((newB = pb.Move(-wx, -wy, -wz, _fieldSize)) != null
+                               && Field[newB.X, newB.Y, newB.Z] == who)
+                        {
+                            pb = newB;
+                        }
+
+                        if (pa.Distance(pb) == _fieldSize)
+                        {
+                            return Players[who - 1];
+                        }
+
+
+                    }
+                }
+            }
+            return null;
         }
+
 
     }
 }

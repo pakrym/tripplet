@@ -31,6 +31,14 @@ namespace TrippleT.Web
                     Clients[player].UpdateMove(playerId, x, y, z);
                 }
             }
+            var win = game.CheckVictory(x, y, z);
+            if (win != null)
+            {
+                foreach (var player in game.Players)
+                {
+                    Clients[player].Win(win);
+                }
+            }
         }
 
         /// <summary>

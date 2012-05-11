@@ -34,7 +34,7 @@
         self.marks[whoFirst] = 1; // first move has X
 
         if (whoFirst == self.id) { // other player O
-            self.marks[opponent] = 2;
+            self.marks[self.opponent] = 2;
             self.myMove();
         }
         else {
@@ -50,12 +50,23 @@
     },
 
     myMove: function () {
+        var self = this;
         this.state = 1;
-        $("#move").text("your");
+        var mark = self.marks[self.id];
+        $("#move")
+            .toggleClass("x", mark == 1)
+            .toggleClass("o", mark == 2)
+            .text("your");
     },
     opponentMove: function () {
+        var self = this;
         this.state = 2;
-        $("#move").text("opponents");
+
+        var mark = self.marks[self.opponent];
+        $("#move")
+            .toggleClass("x", mark == 1)
+            .toggleClass("o", mark == 2)
+            .text("opponents");
     },
 
 
@@ -65,8 +76,9 @@
             tile = $("#t_" + x + "_" + y + "_" + z);
         if (self.field) {
             var mark = self.field[x][y][z];
-            if (mark == 1) { tile.toggleClass("x", true); }
-            if (mark == 2) { tile.toggleClass("o", true); }
+            tile
+                .toggleClass("x", mark == 1)
+                .toggleClass("o", mark == 2);
         }
     },
 
@@ -74,11 +86,6 @@
 
         var block = $(".block");
 
-        block.toggleClass("span4", vertical);
-        block.toggleClass("offset4", vertical);
-
-
-        block.toggleClass("span14", !vertical);
     },
 
     toggle3d: function (enable) {
@@ -91,8 +98,11 @@
 
 
         self.toggleMode(self.d3); // go to vertical if 3d and horizontal, if not
-        $(".block").toggleClass("block-3d", self.d3);
-        
+        $(".block")
+            .toggleClass("block-3d", self.d3)
+            .toggleClass("block-2d", !self.d3); ;
+
+
         //HACK: remove and put back lanes of Chrome will 
         // break hover event on top part of plane 
         // see: http://stackoverflow.com/questions/10534697/hover-works-only-on-lower-part-of-rotatex-transformed-div
@@ -241,7 +251,8 @@
                 .append($('<a href="#"> ')
                         .click(function () { self.playerClick(id); })
                         .attr("id", "pl_" + id)
-                        .text(name)).appendTo($("#playerList"));
+                        .text(name))
+                .appendTo($("#playerList"));
         };
         hub.Left = function (id) {
             $("#pl_" + id).remove();

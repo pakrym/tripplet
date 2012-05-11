@@ -10,7 +10,13 @@ body {
     font-style: italic;
 }
 
-.block {
+
+.block 
+{
+   
+    padding: 10px;
+    width: 300px;
+    margin: 150px auto !important;
     background-color: white;
     -webkit-border-radius: 10px;
        -moz-border-radius: 10px;
@@ -28,6 +34,10 @@ body {
 {
     margin-top: 50px !important;
     height: 450px;
+}
+.block-2d
+{
+    width: 900px;
 }
 .block-inner {
     margin: 10px;
@@ -66,12 +76,22 @@ body {
 
 .tile.x
 {
+    
     background-color: red;
 }
 .tile.o
 {
+    
     background-color: green;
 }
+span.x {
+    color: red;
+}
+
+span.o {
+    color: green;
+}
+
 
 .tile
 {
