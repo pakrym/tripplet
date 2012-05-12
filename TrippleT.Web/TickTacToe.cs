@@ -90,7 +90,7 @@ namespace TrippleT.Web
         {
             var playerId = this.Context.ConnectionId;
 
-            PlayerRepository.Current.Enter(playerId, name);
+            if (!PlayerRepository.Current.Enter(playerId, name)) return;
             Clients.Enter(playerId, name);
 
             // DIRTY HACK BELOW

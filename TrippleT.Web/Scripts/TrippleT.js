@@ -187,7 +187,9 @@
         var self = this;
         self.showScreen(self.gameScreen, function () {
             self.toggleMode(true);
-            $(".block").toggleClass("block-3d", false);
+            $(".block").toggleClass("block-3d", false)
+                            .toggleClass("block-2d", false); ;
+
         });
     },
 

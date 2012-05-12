@@ -17,13 +17,13 @@ namespace TrippleT.Web
         public byte[, ,] Field { get; set; }
 
         /// <summary>
-        /// 
+        ///   Registers move on a game map
         /// </summary>
-        /// <param name="playerId"></param>
+        /// <param name="playerId">player id </param>
         /// <param name="x">tile x coordinate</param>
         /// <param name="y">tile y coordinate</param>
         /// <param name="z">tile z coordinate</param>
-        /// <returns></returns>
+        /// <returns>true if move was valid, false if not</returns>
         public bool Put(string playerId, int x, int y, int z)
         {
             if ((x < 0) || (x >= _fieldSize) ||
@@ -45,7 +45,9 @@ namespace TrippleT.Web
         }
 
 
-
+        /// <summary>
+        /// internal class used for vinner computtaion
+        /// </summary>
         private class Point
         {
             public int X { get; set; }
@@ -87,6 +89,15 @@ namespace TrippleT.Web
         /// <returns>playerId if someone won, -1 if no one did</returns>
         public string CheckVictory(int x, int y, int z)
         {
+
+            /*
+             * Basic winner finding algo:
+             *  1. generate all posible direction vectors ([-1,-1,-1], [-1,-1,0] ... )
+             *  2. move from current position in vector direction while its posible, getting point A
+             *  3. move from current position in reverse vector direction while posible, getting point B
+             *  4. if distance between A and B is field size, we've got the winner!
+             *  
+             */
             var who = Field[x, y, z];
             if (who == 0) return null;
             var ways = new[] { -1, 0, 1 };
