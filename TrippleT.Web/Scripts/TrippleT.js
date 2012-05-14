@@ -44,6 +44,7 @@
 
     },
     endGame: function () {
+        var self = this;
         self.opponent = null;
         self.marks = null;
         self.state = 0;
@@ -140,6 +141,7 @@
 
     tileClick: function (tile) {
         var self = this;
+        if (self.state == 0) return; // ignore clicks when win screen is shown
         if (self.state == 1) // my move
         {
             var pos = $(tile).data();
@@ -152,7 +154,7 @@
     updateMove: function (id, x, y, z) {
 
         var self = this;
-
+        if (self.state == 0) return; //ignore all when not in game
         // do i realy need this check?
         if (self.opponent != id && this.id != id) return;
 
@@ -185,10 +187,14 @@
 
     showGameScreen: function () {
         var self = this;
+        $("#moveText").toggle(true);
+        $("#leaveGame").toggleClass("btn-success", false);
+        $("#victoryText").toggle(false);
         self.showScreen(self.gameScreen, function () {
             self.toggleMode(true);
             $(".block").toggleClass("block-3d", false)
-                            .toggleClass("block-2d", false); ;
+                            .toggleClass("block-2d", false);
+
 
         });
     },
@@ -197,15 +203,17 @@
         var self = this;
 
         $("#offerName").text(self.players[id]);
-        self.state = 4;
+
         self.offerBox.toggle(true);
     },
 
     showWin: function (id) {
         var self = this;
         self.endGame();
+        $("#moveText").toggle(false);
+        $("#victoryText").toggle(true);
+        $("#leaveGame").toggleClass("btn-success");
         $("#winner").text(self.players[id]);
-        self.showScreen(self.victoryScreen);
     },
 
     showExit: function (id) {
@@ -304,12 +312,14 @@
             hub.register($("#playerName").val());
         });
         $("#leaveGame").click(function () {
-            hub.leaveGame();
-            self.endGame();
+            if (self.state != 0) {
+                hub.leaveGame();
+                self.endGame();
+            }
             self.showPlayers();
         });
         $(".backButton").click(function () {
-            self.showScreen(self.playersScreen);
+            self.showPlayers();
         });
 
         self.showScreen(self.loginScreen);
